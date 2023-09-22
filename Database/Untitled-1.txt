@@ -1,0 +1,78 @@
+-- database: c:\backend\Database\practica1.sqlite3
+-- Use the ▷ button in the top right corner to run the entire file.
+CREATE TABLE
+    user (name varchar, email varchar);
+
+INSERT INTO
+    user (name, email)
+VALUES
+    ('gato', 'gato@email');
+
+CREATE TABLE
+    players (
+        player_id INTEGER NOT NULL PRIMARY KEY,
+        name VARCHAR,
+        game VARCHAR
+    );
+
+CREATE TABLE
+    Employees (
+        EmployeeID INTEGER PRIMARY KEY,
+        FirstName TEXT,
+        LastName TEXT,
+        Department TEXT,
+        Salary REAL
+    );
+
+-- Create a Sales table
+CREATE TABLE
+    Sales (
+        SaleID INTEGER PRIMARY KEY,
+        SaleAmount REAL,
+        SaleDate DATE
+    );
+
+-- Create an EmployeeSales table to represent the many-to-many relationship
+CREATE TABLE
+    EmployeeSales (
+        EmployeeSaleID INTEGER PRIMARY KEY,
+        EmployeeID INTEGER,
+        SaleID INTEGER,
+        FOREIGN KEY (EmployeeID) REFERENCES Employees (EmployeeID),
+        FOREIGN KEY (SaleID) REFERENCES Sales (SaleID)
+    );
+
+-- Insert dummy data into the Employees table
+INSERT INTO
+    Employees (FirstName, LastName, Department, Salary)
+VALUES
+    ('John', 'Doe', 'HR', 50000.00),
+    ('Jane', 'Smith', 'Sales', 55000.00),
+    ('Bob', 'Johnson', 'IT', 60000.00),
+    ('Alice', 'Brown', 'Marketing', 48000.00);
+
+-- Insert dummy data into the Sales table
+INSERT INTO
+    Sales (SaleAmount, SaleDate)
+VALUES
+    (1000.00, '2023-09-01'),
+    (1500.00, '2023-09-02'),
+    (2000.00, '2023-09-03'),
+    (1200.00, '2023-09-04');
+
+-- Insert dummy data into the EmployeeSales table to establish relationships
+INSERT INTO
+    EmployeeSales (EmployeeID, SaleID)
+VALUES
+    (1, 1), -- John Doe made sale 1
+    (2, 2), -- Jane Smith made sale 2
+    (3, 3), -- Bob Johnson made sale 3
+    (4, 4);
+
+-- Alice Brown made sale 4;
+SELECT
+    *
+from
+    Employees
+WHERE
+    FirstName = "Jhon";

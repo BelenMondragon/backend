@@ -1,0 +1,52 @@
+-- database: c:\backend\Database\practica3.sqlite3
+-- Use the ▷ button in the top right corner to run the entire file.
+SELECT
+    *
+FROM
+    "Students";
+
+ALTER TABLE Students
+ADD COLUMN "approved" BOOLEAN DEFAULT FALSE;
+
+-- - Crear una vista que muestre la información de los estudiantes que aprobaron el examen final con una
+-- calificación superior a 80.
+CREATE VIEW
+    approved_students AS
+SELECT
+    name,
+    grade,
+    approved
+FROM
+    Students
+WHERE
+    grade >= 80;
+
+-- - Crear un trigger que se active después de cambiar la calificación de un estudiante y la columna
+-- aprobado con un valor de true únicamente si el valor de calificacion es mayor a 80.
+CREATE TRIGGER approved_trigger AFTER
+UPDATE ON Students FOR EACH ROW BEGIN
+UPDATE Students
+SET
+    approved = TRUE
+WHERE
+    grade >= 80;
+
+END;
+
+CREATE TRIGGER non_approved_trigger AFTER
+UPDATE ON Students FOR EACH ROW BEGIN
+UPDATE Students
+SET
+    approved = FALSE
+WHERE
+    grade < 80;
+
+END;
+
+UPDATE "Students"
+SET
+    "grade" = 8
+WHERE
+    id = 5;
+
+DROP TRIGGER non_approved_trigger;

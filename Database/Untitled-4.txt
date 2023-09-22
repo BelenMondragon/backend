@@ -1,0 +1,109 @@
+-- database: c:\backend\Database\practica4.5.sqlite3
+-- Use the ▷ button in the top right corner to run the entire file.
+CREATE TABLE
+    Empleados (
+        id INTEGER PRIMARY KEY,
+        nombres VARCHAR(50),
+        meses_trabajando INTEGER
+    );
+
+INSERT INTO
+    Empleados (id, nombres, meses_trabajando)
+VALUES
+    (1, "Juan Fernandez", 10),
+    -- (2, "Carol Solis", 14),
+    (3, "Ana Marin", 13),
+    (4, "Luis Alfaro", 12);
+
+CREATE TABLE
+    Salarios (
+        id INTEGER PRIMARY KEY,
+        salario INTEGER,
+        empleado_id INTEGER
+    );
+
+INSERT INTO
+    Salarios (id, salario, empleado_id)
+VALUES
+    (1, 500, 1),
+    (2, 650, 2),
+    (3, 400, 3),
+    (4, 450, 4);
+
+CREATE TABLE
+    Ventas_mes_anterior (
+        id INTEGER PRIMARY KEY,
+        ventas INTEGER,
+        empleado_id INTEGER
+    );
+
+INSERT INTO
+    Ventas_mes_anterior (id, ventas, empleado_id)
+VALUES
+    (1, 20, 1),
+    (2, 60, 2),
+    (3, 50, 3),
+    (4, 45, 4);
+
+-- 1- Una consulta SELECT donde obtenga la información de los empleados que hayan realizado más de 50
+-- ventas en el mes anterior
+SELECT
+    id,
+    nombres
+FROM
+    Empleados
+WHERE
+    id IN (
+        SELECT
+            empleado_id
+        FROM
+            Ventas_mes_anterior
+        WHERE
+            ventas < 50
+    );
+
+--2 - Una consulta SELECT donde obtenga la información de los empleados que tengan un salario menor a
+-- 500 dólares y lleven más de 12 meses trabajando
+SELECT
+    id,
+    nombres
+FROM
+    Empleados
+WHERE
+    id IN (
+        SELECT
+            empleado_id
+        FROM
+            Salarios
+        WHERE
+            salario < 500
+            AND meses_trabajando >= 12
+    );
+
+-- 3- Un UPDATE en la tabla SALARIOS donde aumentemos el salario 100 dólares a aquellos empleados que
+-- hayan trabajado más de 12 meses
+UPDATE Salarios
+SET
+    salario = salario + 100
+WHERE
+    id IN (
+        SELECT
+            id
+        FROM
+            Empleados
+        WHERE
+            meses_trabajando > 12
+    );
+
+-- 4- Un DELETE en la tabla EMPLEADOS donde removamos a aquellos empleados cuyas ventas hayan sido
+-- menores a 50
+DELETE FROM Empleados
+WHERE
+    id IN (
+        SELECT
+            empleado_id
+        FROM
+            Ventas_mes_anterior
+        WHERE
+            ventas < 50
+    );
